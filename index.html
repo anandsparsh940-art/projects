@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#142f39">
+  <meta name="description" content="Lavasa Local is a community safety desk for local incidents, essential services, and emergency access.">
+  <title>Lavasa Local — Community Safety Desk</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <style>
+    :root{--ink:#172d36;--deep:#102832;--blue:#1d414b;--paper:#fffdf5;--ground:#f1efe5;--line:#d5d9d0;--muted:#657276;--yellow:#f2bd48;--orange:#ef6849;--green:#07885e;--green-bg:#e4f3ec;--amber:#b66a08;--amber-bg:#fff1d6;--red:#bc342b;--red-bg:#fbe6df;--shadow:4px 4px 0 #d0d4ca}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:86px}
+    body{margin:0;color:var(--ink);background-color:var(--ground);background-image:linear-gradient(rgba(23,45,54,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(23,45,54,.025) 1px,transparent 1px);background-size:22px 22px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+    button,input,select,textarea{font:inherit}
+    button,a{-webkit-tap-highlight-color:transparent}
+    button{cursor:pointer}
+    a{color:inherit}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:0 auto}
+    .mono{font-family:ui-monospace,"Cascadia Code",Consolas,monospace}
+    .eyebrow{margin:0 0 8px;color:#a44830;font:800 9px ui-monospace,Consolas,monospace;letter-spacing:.13em;text-transform:uppercase}
+    .notice-strip{min-height:29px;padding:6px 12px;background:var(--yellow);color:#25343a;text-align:center;font:800 9px ui-monospace,Consolas,monospace;letter-spacing:.045em;text-transform:uppercase}
+    .notice-strip strong{color:var(--deep)}
+    .header{position:sticky;top:0;z-index:20;background:rgba(241,239,229,.96);backdrop-filter:blur(12px);border-bottom:2px solid var(--ink)}
+    .nav{height:67px;display:flex;align-items:center;gap:26px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:190px}
+    .brand-mark{width:38px;height:38px;display:grid;place-items:center;border-radius:4px;background:var(--orange);color:var(--ink)}
+    .brand-copy{display:grid;line-height:1.1}
+    .brand-copy strong{font:900 17px/1 "Arial Narrow",Impact,system-ui,sans-serif;letter-spacing:.025em;text-transform:uppercase}
+    .brand-copy small{margin-top:5px;color:#607075;font:700 8px ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}
+    .nav-links{display:flex;align-items:center;gap:22px;margin-left:auto}
+    .nav-links a{color:#354b52;text-decoration:none;font:800 9px ui-monospace,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase}
+    .nav-links a:hover{color:#a44830}
+    .btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--ink);border-radius:4px;padding:10px 15px;background:transparent;color:var(--ink);font:800 9px ui-monospace,Consolas,monospace;letter-spacing:.04em;text-align:center;text-decoration:none;text-transform:uppercase;transition:transform .15s,background .15s}
+    .btn:hover{transform:translate(-1px,-1px)}
+    .btn-yellow{background:var(--yellow);box-shadow:3px 3px 0 rgba(16,40,50,.18)}
+    .btn-yellow:hover{background:#ffd36a}
+    .btn-dark{background:var(--ink);color:white}
+    .btn-red{background:var(--red);border-color:var(--red);color:white}
+    .btn-small{min-height:38px;padding:8px 11px;font-size:8px}
+    .sos-top{margin-left:0;min-width:82px;background:var(--red);border-color:var(--red);color:white}
+    .menu-toggle{display:none;width:44px;height:44px;border:1px solid var(--ink);border-radius:4px;background:transparent;color:var(--ink)}
+
+    .hero{position:relative;overflow:hidden;background:linear-gradient(125deg,#102832,#1b414b 74%,#28515a);color:#f8f5e9;padding:54px 0}
+    .hero:before{content:"";position:absolute;width:650px;height:650px;right:-180px;top:-400px;border:1px solid rgba(228,239,220,.11);border-radius:50%;background:repeating-radial-gradient(ellipse,transparent 0 27px,rgba(228,239,220,.09) 28px 29px,transparent 30px 47px)}
+    .hero-grid{position:relative;display:grid;grid-template-columns:1.04fr .96fr;gap:48px;align-items:center}
+    .hero .eyebrow{color:var(--yellow)}
+    h1{margin:0 0 19px;color:#f9f4e8;font:900 clamp(52px,6.5vw,81px)/.85 "Arial Narrow",Impact,system-ui,sans-serif;text-transform:uppercase;letter-spacing:-.055em}
+    h1 span{color:var(--yellow)}
+    .hero-copy{max-width:480px;margin:0;color:#c7d4d0;font-size:13px;line-height:1.8}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+    .hero .btn-dark{border-color:rgba(255,255,255,.48);background:transparent}
+    .hero-meta{margin-top:17px;color:#a8bcb9;font:8px/1.6 ui-monospace,Consolas,monospace;letter-spacing:.045em;text-transform:uppercase}
+    .map-panel{position:relative;min-height:282px;overflow:hidden;border:1px solid rgba(236,242,225,.43);border-radius:4px;background-color:#214751;background-image:repeating-radial-gradient(ellipse at 45% 50%,transparent 0 15px,rgba(203,226,204,.25) 16px 17px,transparent 18px 29px),linear-gradient(rgba(230,241,222,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(230,241,222,.06) 1px,transparent 1px);background-size:auto,34px 34px,34px 34px;box-shadow:7px 7px 0 rgba(8,23,28,.25)}
+    .map-top,.map-bottom{position:absolute;left:14px;right:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;color:#e6eee0;font:800 8px ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
+    .map-top{top:13px}.map-bottom{bottom:13px}
+    .map-north{border:1px solid rgba(242,189,72,.7);padding:5px 7px;color:var(--yellow)}
+    .map-pin{position:absolute;left:56%;top:49%;width:17px;height:17px;border:3px solid #f9f2dc;border-radius:50%;background:var(--orange);box-shadow:0 0 0 9px rgba(239,104,73,.25),0 0 0 23px rgba(239,104,73,.1);animation:map-pin-blink 1.5s ease-in-out infinite}
+    @keyframes map-pin-blink{0%,100%{opacity:1;box-shadow:0 0 0 8px rgba(239,104,73,.25),0 0 0 22px rgba(239,104,73,.1)}50%{opacity:.65;box-shadow:0 0 0 14px rgba(239,104,73,.1),0 0 0 29px rgba(239,104,73,.035)}}
+    @media(prefers-reduced-motion:reduce){.map-pin{animation:none}}
+    .map-place{position:absolute;padding:5px 7px;background:rgba(16,40,50,.78);border:1px solid rgba(226,238,222,.22);color:#e6eee0;font:700 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .map-place.one{left:18%;top:35%}.map-place.two{right:12%;top:23%}.map-place.three{left:32%;bottom:25%}
+
+    .status-shell{position:relative;z-index:2;margin-top:-1px;background:#f9f6eb;border-bottom:2px solid var(--ink)}
+    .status-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0 8px}
+    .status-head strong{font:900 10px ui-monospace,Consolas,monospace;letter-spacing:.07em;text-transform:uppercase}
+    .feed-source{color:#69777a;font:700 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+    .status-item{min-height:66px;display:flex;align-items:center;gap:12px;padding:11px 15px;border-top:1px solid #ced4ca;border-right:1px solid #ced4ca}
+    .status-item:first-child{border-left:1px solid #ced4ca}
+    .status-icon{width:31px;height:31px;flex:none;display:grid;place-items:center;border-radius:3px;background:#e5ebe1;color:var(--ink)}
+    .status-name{display:block;color:#667276;font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase;letter-spacing:.05em}
+    .status-value{display:block;margin-top:2px;color:#59676c;font-size:10px;font-weight:800}
+    .status-value.reported{color:var(--amber)}
+    .status-value.critical{color:var(--red)}
+    .critical-bar{display:none;margin:14px auto 0;padding:12px 15px;border:2px solid var(--red);background:var(--red-bg);color:#81281f;font:800 10px ui-monospace,Consolas,monospace;text-transform:uppercase;animation:pulse 1.4s infinite}
+    .critical-bar.show{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    @keyframes pulse{50%{box-shadow:0 0 0 5px rgba(188,52,43,.14)}}
+
+    .section{padding:52px 0}
+    .section-heading{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:20px}
+    .section-heading h2{margin:0;color:var(--ink);font:900 clamp(32px,4vw,48px)/.95 "Arial Narrow",Impact,system-ui,sans-serif;letter-spacing:-.035em;text-transform:uppercase}
+    .section-heading p{max-width:470px;margin:8px 0 0;color:var(--muted);font-size:11px}
+    .section-index{color:#a44830;font:800 8px ui-monospace,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
+    .feed-layout{display:grid;grid-template-columns:minmax(0,1fr) 278px;gap:24px;align-items:start}
+    .feed-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+    .search{min-height:42px;display:flex;align-items:center;gap:8px;flex:1 1 180px;border:1px solid var(--ink);border-radius:4px;padding:0 11px;background:var(--paper)}
+    .search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:10px}
+    .filter-select{min-height:42px;border:1px solid var(--ink);border-radius:4px;padding:0 10px;background:var(--paper);color:var(--ink);font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .feed-count{margin-left:auto;color:#69777a;font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .issue-list{display:grid;gap:11px}
+    .issue-card{position:relative;padding:16px;border:1px solid var(--ink);border-left:5px solid var(--amber);border-radius:3px;background:var(--paper);box-shadow:3px 3px 0 #d1d5cc}
+    .issue-card.official{border-left-color:var(--green)}
+    .issue-card.critical{border-left-color:var(--red);background:#fffaf5}
+    .issue-card.resolved{opacity:.76}
+    .issue-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+    .issue-title{margin:0;color:var(--ink);font:900 17px/1.15 "Arial Narrow",Impact,system-ui,sans-serif;text-transform:uppercase}
+    .issue-meta{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+    .badge{min-height:23px;display:inline-flex;align-items:center;gap:5px;border-radius:2px;padding:4px 7px;font:800 7px ui-monospace,Consolas,monospace;letter-spacing:.03em;text-transform:uppercase}
+    .badge-community{background:var(--amber-bg);color:#874e07}
+    .badge-official{background:var(--green-bg);color:#056542}
+    .badge-critical{background:var(--red-bg);color:#9b2d25}
+    .badge-status{background:#e7ece8;color:#465b5d}
+    .badge-high{background:#fae8d4;color:#90500d}
+    .badge-medium,.badge-low{background:#e8eee8;color:#536663}
+    .issue-location{margin:10px 0 0;color:#5f6d70;font-size:10px}
+    .issue-description{margin:9px 0 0;color:#394b51;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}
+    .issue-photo{display:block;max-width:100%;max-height:240px;margin-top:12px;border:1px solid var(--line);border-radius:3px;object-fit:cover}
+    .issue-footer{display:flex;justify-content:space-between;align-items:center;gap:9px;margin-top:14px;padding-top:12px;border-top:1px solid #e0e4dc}
+    .issue-date{color:#7b8787;font:8px ui-monospace,Consolas,monospace}
+    .issue-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+    .text-btn{min-height:36px;border:1px solid #aab6ae;border-radius:3px;padding:7px 9px;background:transparent;color:#334a50;font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .text-btn:hover{background:#eef1e8}
+    .text-btn.voted{background:#e2f1e8;border-color:#4e9373;color:#096341}
+    .status-control{max-width:120px;min-height:36px;border:1px solid #aab6ae;border-radius:3px;padding:6px;background:var(--paper);color:#334a50;font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .empty-feed{padding:33px 20px;border:1px dashed #97a69e;border-radius:3px;text-align:center;background:rgba(255,253,245,.6)}
+    .empty-feed strong{display:block;color:var(--ink);font:900 14px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .empty-feed p{max-width:385px;margin:7px auto 14px;color:#687679;font-size:10px}
+    .feed-aside{display:grid;gap:13px}
+    .aside-card{padding:15px;border:1px solid var(--ink);border-radius:3px;background:#e6ece5}
+    .aside-card h3{margin:0 0 10px;color:var(--ink);font:900 12px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .legend-row{display:flex;gap:9px;align-items:flex-start;margin:9px 0;color:#59676a;font-size:9px}
+    .legend-row .badge{flex:none}
+    .aside-card p{margin:8px 0 0;color:#637175;font-size:9px}
+    .danger-card{background:#f4e3d7;border-color:#c78663}
+    .danger-card h3{color:#8a3e2c}
+    .danger-card .btn{width:100%;margin-top:10px}
+
+    .directory{background:#dfe7e2;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+    .directory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .directory-card{min-height:150px;display:flex;flex-direction:column;align-items:flex-start;padding:15px;border:1px solid var(--ink);border-radius:3px;background:var(--paper);box-shadow:3px 3px 0 #becbc4}
+    .directory-top{width:100%;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+    .directory-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:3px;background:#e8eee8;color:var(--ink);font-size:16px}
+    .directory-card h3{margin:9px 0 4px;color:var(--ink);font:900 13px/1.15 "Arial Narrow",Impact,system-ui,sans-serif;text-transform:uppercase}
+    .directory-card p{margin:0 0 12px;color:#667276;font-size:9px}
+    .directory-card .btn{margin-top:auto}
+    .unverified-note{margin-top:15px;padding:11px 13px;border-left:4px solid var(--yellow);background:#f7f2df;color:#59676a;font-size:9px}
+    .suggested-list{margin-top:14px}
+    .suggested-list:empty{display:none}
+    .pending-row{padding:10px 12px;margin-top:8px;border:1px solid #d2c397;border-radius:3px;background:#fff8e8}
+    .pending-row strong{display:block;color:#554b31;font-size:10px}
+    .pending-row span{color:#7b704f;font:8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .public-contact{position:relative}
+    .wildlife-note{margin:8px 0;color:#8a3a2e!important;font-size:10px!important}
+    .directory-card.wildlife-card .btn{margin-top:8px}
+    .public-contact h3{font-size:16px}
+    .public-contact p{margin:5px 0;color:#59676a;font-size:9px}
+    .public-contact .public-number{font:800 10px ui-monospace,Consolas,monospace;color:#314c52}
+    .public-contact .contact-email{display:inline-block;margin:3px 0;color:#314c52;font-size:11px;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+    .contact-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:10px}
+    .contact-actions .btn{min-height:40px;flex:1 1 75px;padding:6px 8px;font-size:7px}
+    .contact-source{display:inline-block;margin-top:8px;color:#6d7774;font:700 7px ui-monospace,Consolas,monospace;text-transform:uppercase;text-decoration:underline;text-underline-offset:2px}
+
+    .report-callout{padding:36px 0}
+    .report-band{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 24px;border:1px solid var(--ink);border-radius:3px;background:var(--yellow);box-shadow:5px 5px 0 var(--ink)}
+    .report-band h2{margin:0;color:var(--ink);font:900 clamp(24px,3vw,34px)/1 "Arial Narrow",Impact,system-ui,sans-serif;text-transform:uppercase}
+    .report-band p{margin:7px 0 0;color:#536067;font-size:10px}
+    .report-band .btn{flex:none;background:var(--ink);color:white}
+    .footer{padding:27px 0 82px;background:var(--deep);border-top:4px solid var(--orange);color:#dae4dc}
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .footer-note{max-width:540px;color:#adbfba;font:8px/1.6 ui-monospace,Consolas,monospace}
+
+    dialog{width:min(660px,calc(100% - 24px));max-height:min(90vh,900px);overflow:auto;border:2px solid var(--ink);border-radius:4px;padding:0;background:var(--paper);color:var(--ink);box-shadow:8px 8px 0 rgba(16,40,50,.35)}
+    dialog::backdrop{background:rgba(9,26,33,.72);backdrop-filter:blur(3px)}
+    .dialog-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:17px 19px;border-bottom:1px solid var(--line);background:var(--paper)}
+    .dialog-head h2{margin:0;font:900 22px "Arial Narrow",Impact,system-ui,sans-serif;text-transform:uppercase}
+    .dialog-head p{margin:4px 0 0;color:var(--muted);font-size:9px}
+    .dialog-close{width:40px;height:40px;border:1px solid #aab6ae;border-radius:3px;background:transparent;font-size:20px}
+    .dialog-body{padding:18px 19px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:grid;gap:5px}
+    .field.full{grid-column:1/-1}
+    .field label{color:#40525a;font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase;letter-spacing:.04em}
+    .field input,.field select,.field textarea{width:100%;min-height:43px;border:1px solid #aebbb3;border-radius:3px;padding:10px;background:#fffefa;color:var(--ink);font-size:10px;outline:none}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--orange);box-shadow:0 0 0 2px rgba(239,104,73,.14)}
+    .field textarea{min-height:95px;resize:vertical}
+    .field small{color:#7a8685;font-size:8px}
+    .field input[type=file]{padding:7px}
+    .preview-wrap{display:none;margin-top:8px}
+    .preview-wrap.show{display:block}
+    .preview-wrap img{max-width:100%;max-height:180px;border:1px solid var(--line);border-radius:3px}
+    .form-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:15px}
+    .form-note{max-width:350px;color:#71807e;font:8px/1.5 ui-monospace,Consolas,monospace}
+    .form-message{display:none;margin-top:12px;border-radius:3px;padding:10px 12px;font-size:9px}
+    .form-message.show{display:block}
+    .form-message.success{background:var(--green-bg);color:#056542}
+    .form-message.error{background:var(--red-bg);color:#8d2d25}
+    .sos-list{display:grid;gap:8px}
+    .sos-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:3px;background:#fffefa}
+    .sos-row strong{display:block;color:var(--ink);font:900 11px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .sos-row small{display:block;color:#6a7779;font-size:9px}
+    .sos-row .btn{min-width:86px}
+    .sos-warning{margin:0 0 13px;padding:10px 12px;border-left:4px solid var(--red);background:var(--red-bg);color:#81362c;font-size:9px}
+    .sos-row .unavailable{color:#7a7770;font:800 7px ui-monospace,Consolas,monospace;text-align:right;text-transform:uppercase}
+    .bottom-nav{display:none}
+    .toast{position:fixed;z-index:50;bottom:82px;left:50%;transform:translate(-50%,15px);opacity:0;pointer-events:none;max-width:calc(100% - 28px);padding:11px 14px;border:1px solid #f2bd48;border-radius:3px;background:var(--ink);color:white;font:800 8px ui-monospace,Consolas,monospace;text-align:center;text-transform:uppercase;transition:.2s}
+    .toast.visible{transform:translate(-50%,0);opacity:1}
+    .offline-indicator{display:none;position:fixed;z-index:40;top:75px;left:50%;transform:translateX(-50%);padding:6px 10px;border-radius:3px;background:var(--ink);color:white;font:800 8px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .offline-indicator.show{display:block}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:900px){.wrap{width:min(100% - 32px,760px)}.hero-grid{gap:26px}.nav-links{gap:14px}.brand{min-width:160px}.feed-layout{grid-template-columns:minmax(0,1fr) 240px}.directory-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){
+      html{scroll-padding-top:70px}
+      .wrap{width:calc(100% - 28px)}
+      .notice-strip{font-size:7px}
+      .nav{height:59px;gap:10px}
+      .brand{min-width:0;margin-right:auto}
+      .brand-mark{width:35px;height:35px}
+      .brand-copy strong{font-size:15px}
+      .brand-copy small{font-size:7px}
+      .nav-links{display:none}
+      .sos-top{min-height:44px;margin:0;padding:8px 12px}
+      .hero{padding:36px 0 28px}
+      .hero-grid{grid-template-columns:1fr;gap:22px}
+      h1{font-size:clamp(54px,15vw,76px)}
+      .hero-copy{font-size:12px}
+      .hero-actions .btn{flex:1}
+      .map-panel{min-height:230px}
+      .status-head{align-items:flex-start;flex-direction:column;gap:3px;padding:10px 0 7px}
+      .status-grid{grid-template-columns:1fr 1fr}
+      .status-item{min-height:58px;padding:8px;border-left:1px solid #ced4ca}
+      .status-item:last-child{grid-column:1/-1}
+      .section{padding:39px 0}
+      .section-heading{display:block;margin-bottom:15px}
+      .section-heading h2{font-size:37px}
+      .section-heading p{font-size:10px}
+      .feed-layout{grid-template-columns:1fr}
+      .feed-aside{grid-template-columns:1fr 1fr}
+      .feed-aside .aside-card:first-child{grid-column:1/-1}
+      .feed-count{width:100%;margin:0}
+      .issue-card{padding:12px}
+      .issue-head{display:block}
+      .issue-title{font-size:15px}
+      .issue-footer{align-items:flex-start;flex-direction:column}
+      .issue-actions{width:100%;justify-content:flex-start}
+      .text-btn{min-height:40px}
+      .status-control{min-height:40px}
+      .directory-grid{grid-template-columns:1fr 1fr;gap:8px}
+      .directory-card{min-height:162px;padding:11px}
+      .directory-card h3{font-size:11px}
+      .directory-card p{font-size:8px}
+      .directory-card .btn{width:100%;padding:7px 6px;font-size:7px}
+      .report-band{align-items:flex-start;flex-direction:column;padding:17px}
+      .report-band .btn{width:100%}
+      .footer{padding-bottom:94px}
+      .footer-inner{align-items:flex-start;flex-direction:column}
+      .bottom-nav{position:fixed;z-index:30;right:0;bottom:0;left:0;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px max(6px,env(safe-area-inset-bottom));border-top:2px solid var(--ink);background:rgba(255,253,245,.97);backdrop-filter:blur(10px)}
+      .bottom-nav a,.bottom-nav button{min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;border-radius:3px;background:transparent;color:var(--ink);font:800 7px ui-monospace,Consolas,monospace;text-decoration:none;text-transform:uppercase}
+      .bottom-nav svg{width:17px;height:17px}
+      .bottom-nav .nav-sos{color:var(--red)}
+      dialog{width:100%;max-width:none;max-height:93vh;margin:auto 0 0;border-radius:8px 8px 0 0;border-bottom:0}
+      .form-grid{grid-template-columns:1fr}
+      .field.full{grid-column:auto}
+      .form-actions{align-items:stretch;flex-direction:column}
+      .form-actions .btn{width:100%}
+      .sos-row{grid-template-columns:1fr auto}
+      .offline-indicator{top:65px}
+    }
+    @media(max-width:380px){.directory-grid{grid-template-columns:1fr}.directory-card{min-height:140px}.feed-aside{grid-template-columns:1fr}.feed-aside .aside-card:first-child{grid-column:auto}.brand-copy small{letter-spacing:.03em}}
+
+    /* Readability pass: keep supporting text comfortably legible. */
+    .notice-strip{font-size:10px;min-height:33px}
+    .brand-copy strong{font-size:18px}
+    .brand-copy small{font-size:9px}
+    .nav-links a{font-size:10px}
+    .btn{font-size:11px}
+    .btn-small{font-size:10px}
+    .hero .eyebrow,.eyebrow{font-size:10px}
+    .hero-copy{font-size:15px}
+    .hero-meta{font-size:10px}
+    .map-top,.map-bottom{font-size:9px}
+    .map-place{font-size:9px}
+    .status-head strong{font-size:11px}
+    .feed-source,.status-name{font-size:9px}
+    .status-value{font-size:12px}
+    .section-index{font-size:9px}
+    .section-heading p{font-size:13px}
+    .search input{font-size:13px}
+    .filter-select{font-size:10px}
+    .feed-count{font-size:10px}
+    .issue-title{font-size:19px}
+    .badge{font-size:9px}
+    .issue-location{font-size:12px}
+    .issue-description{font-size:14px;line-height:1.6}
+    .issue-date{font-size:10px}
+    .text-btn,.status-control{font-size:10px}
+    .empty-feed strong{font-size:15px}
+    .empty-feed p{font-size:12px}
+    .aside-card h3{font-size:14px}
+    .legend-row,.aside-card p{font-size:11px}
+    .directory-card h3{font-size:15px}
+    .directory-card p,.public-contact p{font-size:11px}
+    .unverified-note{font-size:11px}
+    .pending-row strong{font-size:12px}
+    .pending-row span,.contact-source{font-size:9px}
+    .public-contact .public-number{font-size:12px}
+    .contact-actions .btn{font-size:9px}
+    .report-band p{font-size:12px}
+    .footer-note{font-size:10px}
+    .dialog-head p{font-size:11px}
+    .field label{font-size:10px}
+    .field input,.field select,.field textarea{font-size:13px;min-height:46px}
+    .field textarea{min-height:105px}
+    .field small{font-size:10px}
+    .form-note{font-size:10px}
+    .form-message{font-size:11px}
+    .sos-row strong{font-size:12px}
+    .sos-row small,.sos-warning{font-size:11px}
+    .sos-row .unavailable{font-size:9px}
+    .toast,.offline-indicator{font-size:10px}
+    .bottom-nav a,.bottom-nav button{font-size:9px}
+    @media(max-width:680px){
+      .notice-strip{font-size:9px}
+      .brand-copy strong{font-size:16px}
+      .brand-copy small{font-size:8px}
+      .hero-copy{font-size:14px}
+      .hero-meta{font-size:9px}
+      .section-heading p{font-size:12px}
+      .issue-title{font-size:17px}
+      .issue-description{font-size:13px}
+      .directory-card h3{font-size:13px}
+      .directory-card p,.public-contact p{font-size:10px}
+      .directory-card .btn{font-size:9px}
+      .bottom-nav a,.bottom-nav button{font-size:9px}
+    }
+    .emergency-ribbon{background:#f7e9df;border-bottom:1px solid #d9ab91}
+    .emergency-ribbon-inner{display:grid;grid-template-columns:1.05fr repeat(3,1fr);align-items:stretch}
+    .emergency-ribbon-label{display:flex;align-items:center;gap:9px;padding:12px 14px 12px 0;color:#873b2d;font:900 10px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .emergency-ribbon-label span{font-size:17px}
+    .emergency-contact{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-left:1px solid #d9ab91;text-decoration:none}
+    .emergency-contact:hover{background:rgba(255,255,255,.4)}
+    .emergency-contact strong{display:block;color:#5e3329;font:900 10px ui-monospace,Consolas,monospace;text-transform:uppercase}
+    .emergency-contact small{display:block;margin-top:3px;color:#75584f;font-size:9px}
+    .emergency-contact b{flex:none;color:#8b3629;font:900 14px ui-monospace,Consolas,monospace}
+    @media(max-width:680px){
+      .emergency-ribbon-inner{grid-template-columns:1fr 1fr}
+      .emergency-ribbon-label{grid-column:1/-1;padding:10px 0 4px}
+      .emergency-contact{min-height:58px;padding:9px 6px;border-top:1px solid #d9ab91}
+      .emergency-contact:nth-child(3){border-left:0}
+      .emergency-contact strong{font-size:9px}
+      .emergency-contact small{font-size:8px}
+      .emergency-contact b{font-size:12px}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="notice-strip"><strong>Lavasa Local / Phase 1</strong> · Community information only · Does not replace emergency services</div>
+  <header class="header">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="Lavasa Local home">
+        <span class="brand-mark" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 25 25" fill="none"><path d="M2.5 18.5 8.2 9l3.4 5 3.8-7 7.1 11.5H2.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M5.5 18.5c3.4-2.1 6.4-2.1 9.5 0s5.2 2.1 7.3 0" stroke="#F2BD48" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        <span class="brand-copy"><strong>Lavasa Local</strong><small>Community safety desk</small></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#alerts">Alerts</a><a href="#directory">Services</a><a href="#report" data-open-report>Report an issue</a>
+      </nav>
+      <button class="btn sos-top" type="button" data-open-sos aria-label="Open emergency quick dial"><span aria-hidden="true">✚</span> SOS</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Mulshi Taluka / community field desk</p>
+          <h1>Know what's<br><span>happening.</span></h1>
+          <p class="hero-copy">A shared place for Lavasa incident reports, essential local services, and quick access to emergency help. Community posts are clearly marked and are not official advisories.</p>
+          <div class="hero-actions"><a class="btn btn-yellow" href="#alerts">View incident board <span aria-hidden="true">↓</span></a><button class="btn btn-dark" type="button" data-open-report>Report a local issue</button></div>
+          <p class="hero-meta">No account required / Reports saved on this device / Official feed not connected</p>
+        </div>
+        <div class="map-panel" role="img" aria-label="Stylized topographic map for Lavasa">
+          <div class="map-top"><span>Lavasa / Field map</span><span class="map-north">N ↑</span></div>
+          <span class="map-place one">Dasve</span><span class="map-place two">Mugaon</span><span class="map-place three">Portofino</span>
+          <span class="map-pin" aria-hidden="true"></span>
+          <div class="map-bottom"><span>Western Ghats</span><span>Conditions unconfirmed</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="emergency-ribbon" aria-label="Quick emergency contacts">
+      <div class="wrap emergency-ribbon-inner">
+        <div class="emergency-ribbon-label"><span aria-hidden="true">✚</span> Emergency quick calls</div>
+        <a class="emergency-contact" href="tel:112"><span><strong>Police / emergency</strong><small>India emergency response</small></span><b>112</b></a>
+        <a class="emergency-contact" href="tel:108"><span><strong>Ambulance</strong><small>Maharashtra emergency medical service</small></span><b>108</b></a>
+        <a class="emergency-contact" href="tel:+918956712864"><span><strong>CHRIST Lavasa campus</strong><small>+91 89567 12864 · campus only</small></span><b>Call</b></a>
+      </div>
+    </section>
+
+    <section class="status-shell" aria-labelledby="statusHeading">
+      <div class="wrap">
+        <div class="status-head"><strong id="statusHeading">Hill & infrastructure monitor</strong><span class="feed-source">No official live feed connected · community reports shown separately</span></div>
+        <div class="status-grid">
+          <div class="status-item" id="roadStatus"><span class="status-icon" aria-hidden="true">⌁</span><span><span class="status-name">Temghar–Lavasa Ghat Road</span><span class="status-value">Awaiting verified update</span></span></div>
+          <div class="status-item" id="powerStatus"><span class="status-icon" aria-hidden="true">ϟ</span><span><span class="status-name">Power grid feeder</span><span class="status-value">Awaiting verified update</span></span></div>
+          <div class="status-item" id="waterStatus"><span class="status-icon" aria-hidden="true">◌</span><span><span class="status-name">Warasgaon Pumping Station</span><span class="status-value">Awaiting verified update</span></span></div>
+        </div>
+        <div class="critical-bar" id="criticalBar" role="alert"><span id="criticalText"></span><button class="text-btn" id="criticalView" type="button">View report</button></div>
+      </div>
+    </section>
+
+    <section class="section" id="alerts">
+      <div class="wrap">
+        <div class="section-heading">
+          <div><p class="eyebrow">Infrastructure / incident board</p><h2>Local alerts</h2><p>Community reports are unverified observations. Confirm road and safety information with official sources before acting.</p></div>
+          <span class="section-index">Feed 01 / Current device</span>
+        </div>
+        <div class="feed-layout">
+          <div>
+            <div class="feed-tools">
+              <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Search alerts</span><input id="feedSearch" type="search" placeholder="Search title, area, category…"></label>
+              <select class="filter-select" id="categoryFilter" aria-label="Filter alerts by category">
+                <option value="all">All categories</option>
+                <option value="landslide">Landslide / Ghat road</option><option value="water">Water supply / leakage</option><option value="power">Power / electrical</option><option value="garbage">Garbage / sanitation</option><option value="streetlights">Streetlights / lighting</option><option value="wildlife">Wildlife / snake hazard</option>
+              </select>
+              <select class="filter-select" id="severityFilter" aria-label="Filter alerts by urgency"><option value="all">Any urgency</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+              <span class="feed-count" id="feedCount">0 reports</span>
+            </div>
+            <div class="issue-list" id="issueList" aria-live="polite"></div>
+          </div>
+          <aside class="feed-aside">
+            <div class="aside-card">
+              <h3>Read the signal</h3>
+              <div class="legend-row"><span class="badge badge-official">◆ Official advisory</span><span>Issued by an authenticated township or government authority.</span></div>
+              <div class="legend-row"><span class="badge badge-community">● Community report</span><span>Resident-submitted; not independently verified.</span></div>
+              <p>This preview cannot authenticate official issuers. Selecting “Official” in the report form will require confirmation and the post will be stored as a community report.</p>
+            </div>
+            <div class="aside-card danger-card">
+              <h3>Urgent danger?</h3>
+              <p>This community board does not dispatch responders. Call emergency services directly.</p>
+              <button class="btn btn-red btn-small" type="button" data-open-sos>Open SOS quick dial</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section directory" id="directory">
+      <div class="wrap">
+        <div class="section-heading">
+          <div><p class="eyebrow">Local trades / verified contacts only</p><h2>Service directory</h2><p>Find technicians, drivers, water delivery, health services, and wildlife support serving the valley.</p></div>
+          <span class="section-index">Index 02 / Lavasa valley</span>
+        </div>
+        <div class="directory-grid" id="directoryGrid"></div>
+        <div class="unverified-note"><strong>Contact integrity:</strong> No Lavasa provider has been locally verified for this preview. The public listings below are linked to provider websites but are not independently confirmed; check coverage, availability, and price before hiring. Suggestions remain on this device until a moderator workflow is connected.</div>
+        <div class="suggested-list" id="suggestedList" aria-label="Unverified provider suggestions saved on this device"></div>
+      </div>
+    </section>
+
+    <section class="report-callout">
+      <div class="wrap report-band"><div><h2>See a problem? Log it.</h2><p>Add the location, urgency, and what neighbours should know. Keep private details out of the public description.</p></div><button class="btn" type="button" data-open-report>Open incident form <span aria-hidden="true">→</span></button></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner"><div class="brand"><span class="brand-mark" aria-hidden="true">⌁</span><span class="brand-copy"><strong style="color:#f7f4e9">Lavasa Local</strong><small style="color:#aebdb8">Community safety desk / Phase 1 preview</small></span></div><div class="footer-note">Community information board only. Not affiliated with emergency services or township administration. For police, fire, or urgent help in India call 112; for ambulance service in Maharashtra call 108.</div></div>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Quick navigation">
+    <a href="#alerts"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.5 17 5v5c0 4-3 6.5-7 8-4-1.5-7-4-7-8V5l7-2.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4m0 2v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Alerts</a>
+    <button type="button" data-open-report><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Report</button>
+    <a href="#directory"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 4.5h14v12H3zM6 2.5v4m8-4v4M3 8h14" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Services</a>
+    <button class="nav-sos" type="button" data-open-sos><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2.5 18 17H2l8-14.5Z" stroke="currentColor" stroke-width="1.5"/><path d="M10 7v4m0 2.5v.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>SOS</button>
+  </nav>
+
+  <dialog id="reportDialog" aria-labelledby="reportTitle">
+    <div class="dialog-head"><div><h2 id="reportTitle">Report an incident</h2><p>Required fields are marked. Your contact number is private on this device.</p></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close report form">×</button></div>
+    <div class="dialog-body">
+      <form id="incidentForm">
+        <div class="form-grid">
+          <div class="field"><label for="issueCategory">Category *</label><select id="issueCategory" required><option value="">Choose one</option><option value="landslide">🚧 Landslide / Ghat Road Blockage</option><option value="water">💧 Water Supply & Leakage</option><option value="power">⚡ Power Grid & Electrical Cables</option><option value="garbage">🗑️ Garbage & Sanitation</option><option value="streetlights">💡 Streetlights & Lighting</option><option value="wildlife">🐍 Wildlife & Snake Hazard</option></select></div>
+          <div class="field"><label for="issueUrgency">Urgency *</label><select id="issueUrgency" required><option value="">Choose urgency</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+          <div class="field full"><label for="issueTitle">Title / summary * (5–120 characters)</label><input id="issueTitle" minlength="5" maxlength="120" required placeholder="e.g. Fallen tree partially blocking the ghat road"></div>
+          <div class="field"><label for="issueArea">Neighbourhood / area *</label><select id="issueArea" required><option value="">Choose an area</option><option>Dasve Town Center</option><option>Portofino Street</option><option>Mugaon</option><option>Villa clusters</option><option>Temghar–Lavasa Ghat Road</option><option>Warasgaon Lake</option><option>Other / nearby village</option></select></div>
+          <div class="field"><label for="issueLandmark">Specific landmark / flat (optional)</label><input id="issueLandmark" maxlength="100" placeholder="Building, turn, or landmark"></div>
+          <div class="field"><label for="sourceType">Source classification *</label><select id="sourceType" required><option value="community">Community report</option><option value="official">Official advisory (authorized issuers only)</option></select><small>Unverified official claims are shown as community reports.</small></div>
+          <div class="field"><label for="reporterPhone">Your phone (optional / private)</label><input id="reporterPhone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" pattern="\+?[0-9\s()-]{7,20}" placeholder="+91 …"><small>Never shown on the public incident card.</small></div>
+          <div class="field full"><label for="issueDetails">Detailed description * (10–1000 characters)</label><textarea id="issueDetails" minlength="10" maxlength="1000" required placeholder="Describe what you observed, when it happened, and any immediate access concern. Do not include someone else's personal details."></textarea></div>
+          <div class="field full"><label for="issuePhoto">Photo attachment (optional / max 5 MB)</label><input id="issuePhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="environment"><small>JPEG, PNG, or WebP. The image is resized in your browser before it is saved.</small><div class="preview-wrap" id="previewWrap"><img id="photoPreview" alt="Selected incident photo preview"></div></div>
+        </div>
+        <div class="form-actions"><span class="form-note">Phase 1 preview: reports are stored in this browser only and are not sent to authorities or other residents.</span><button class="btn btn-yellow" id="submitIssue" type="submit">Publish community report</button></div>
+        <div class="form-message" id="formMessage" role="status"></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="providerDialog" aria-labelledby="providerTitle">
+    <div class="dialog-head"><div><h2 id="providerTitle">Suggest a service contact</h2><p>Suggestions are unverified and visible only on this device.</p></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close provider form">×</button></div>
+    <div class="dialog-body">
+      <form id="providerForm">
+        <div class="form-grid">
+          <div class="field"><label for="providerCategory">Service category *</label><select id="providerCategory" required></select></div>
+          <div class="field"><label for="providerName">Provider / business name *</label><input id="providerName" maxlength="100" required></div>
+          <div class="field"><label for="providerTrade">Trade title *</label><input id="providerTrade" maxlength="80" required placeholder="e.g. Inverter technician"></div>
+          <div class="field"><label for="providerPhone">Phone number *</label><input id="providerPhone" type="tel" inputmode="tel" maxlength="20" pattern="\+?[0-9\s()-]{7,20}" required placeholder="+91 …"></div>
+          <div class="field"><label for="providerHours">Operating hours *</label><input id="providerHours" maxlength="80" required placeholder="e.g. 9 am–6 pm"></div>
+          <div class="field"><label for="providerAreas">Coverage areas *</label><input id="providerAreas" maxlength="120" required placeholder="Dasve, Portofino, Mugaon…"></div>
+          <div class="field full"><label for="providerNotes">Specialty notes (optional)</label><textarea id="providerNotes" maxlength="240" placeholder="Relevant equipment, vehicle type, or service details"></textarea></div>
+        </div>
+        <div class="form-actions"><span class="form-note">A suggestion is not a verified listing. No call or WhatsApp button will appear until a moderator verifies it.</span><button class="btn btn-yellow" type="submit">Save suggestion here</button></div>
+        <div class="form-message" id="providerMessage" role="status"></div>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog id="sosDialog" aria-labelledby="sosTitle">
+    <div class="dialog-head"><div><h2 id="sosTitle">Emergency quick dial</h2><p>Call emergency services directly for urgent danger.</p></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close emergency panel">×</button></div>
+    <div class="dialog-body">
+      <p class="sos-warning"><strong>Lavasa Local is not an emergency service.</strong> For immediate police, fire, or rescue response call 112. For ambulance service in Maharashtra call 108.</p>
+      <div class="sos-list">
+        <div class="sos-row"><span><strong>Medical / Ambulance</strong><small>Maharashtra Emergency Medical Services · 24×7</small></span><a class="btn btn-red" href="tel:108">Call 108</a></div>
+        <div class="sos-row"><span><strong>Police / Emergency response</strong><small>India pan-India emergency number</small></span><a class="btn btn-red" href="tel:112">Call 112</a></div>
+        <div class="sos-row"><span><strong>Christ Lavasa campus emergency</strong><small>Campus security, medical, and hostel teams · campus-only contact</small></span><a class="btn btn-small" href="tel:+918956712864">Call campus</a></div>
+        <div class="sos-row"><span><strong>Pune Rural Police control room</strong><small>Official district police contact · Paud station direct line not confirmed</small></span><a class="btn btn-small" href="tel:+912025657171">Call control room</a></div>
+        <div class="sos-row"><span><strong>Paud Police Station / jurisdiction</strong><small>For urgent police help, use the national emergency line.</small></span><a class="btn btn-small" href="tel:112">Call 112</a></div>
+        <div class="sos-row"><span><strong>Pune District Disaster Control Room</strong><small>District disaster management helpline</small></span><a class="btn btn-small" href="tel:1077">Call 1077</a></div>
+        <div class="sos-row"><span><strong>Ghat breakdown / towing</strong><small>Local 24×7 towing number has not been verified for this preview.</small></span><span class="unavailable">Contact pending</span></div>
+        <div class="sos-row"><span><strong>Wildlife / snake hazard</strong><small>For snakebite or medical emergency, call Maharashtra ambulance service.</small></span><a class="btn btn-small" href="tel:108">Call 108</a></div>
+      </div>
+      <p class="form-note" style="margin:13px 0 0">Sources: <a href="https://112.gov.in/" target="_blank" rel="noopener noreferrer">ERSS 112</a> · <a href="https://nhm.maharashtra.gov.in/en/scheme/maharashtra-emergency-medical-services-mems/" target="_blank" rel="noopener noreferrer">Maharashtra NHM 108</a> · <a href="https://puneruralpolice.gov.in/" target="_blank" rel="noopener noreferrer">Pune Rural Police</a> · <a href="https://pune.gov.in/" target="_blank" rel="noopener noreferrer">Pune District</a> · <a href="https://lavasa.christuniversity.in/safety" target="_blank" rel="noopener noreferrer">CHRIST Lavasa campus line</a>. Numbers above open your phone dialer; local availability can change.</p>
+    </div>
+  </dialog>
+
+  <div class="offline-indicator" id="offlineIndicator">Offline / locally saved data available</div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+      const ISSUE_KEY = "lavasa-local-issues-v2";
+      const PROVIDER_KEY = "lavasa-local-provider-suggestions-v1";
+      const VOTE_KEY = "lavasa-local-votes-v2";
+      const categories = [
+        {id:"landslide",label:"Landslide / Ghat Road Blockage",short:"Road / landslide",icon:"🚧",status:"road"},
+        {id:"water",label:"Water Supply & Leakage",short:"Water supply",icon:"💧",status:"water"},
+        {id:"power",label:"Power Grid & Electrical Cables",short:"Power / cables",icon:"⚡",status:"power"},
+        {id:"garbage",label:"Garbage & Sanitation",short:"Waste / sanitation",icon:"🗑️",status:""},
+        {id:"streetlights",label:"Streetlights & Lighting",short:"Lighting",icon:"💡",status:""},
+        {id:"wildlife",label:"Wildlife & Snake Hazard",short:"Wildlife / snake",icon:"🐍",status:""}
+      ];
+      const providers = [
+        {id:"electric",label:"Electricians & Inverter Technicians",icon:"⚡",desc:"Power backup, feeder faults, and electrical repair."},
+        {id:"plumber",label:"Plumbers & Pump Mechanics",icon:"🔧",desc:"Water leaks, pumps, and hydro-pneumatic systems."},
+        {id:"transport",label:"Ghat Cabs & Breakdown Towing",icon:"🚕",desc:"Local journeys, ghat drivers, and vehicle recovery."},
+        {id:"water",label:"Water Tanker Operators",icon:"💧",desc:"Potable and domestic water delivery."},
+        {id:"wildlife",label:"Wildlife & Snake Hazard Response",icon:"🐍",desc:"Snake relocation, wildlife rescue, and hazard response contacts."}
+      ];
+      const publicContacts = [
+        {
+          category:"medical",
+          name:"Apollo Lavasa Hospital",
+          trade:"Hospital / medical care",
+          phone:"+912066771000",
+          phones:[
+            {label:"Call 1",phone:"+912066771000"},
+            {label:"Call 2",phone:"+912066771111"},
+            {label:"Call 3",phone:"+912066721066"}
+          ],
+          numberText:"+91 20 6677 1000 · +91 20 6677 1111 · +91 20 6672 1066",
+          coverage:"7th, Mulshi, Dasve Circle, Village Dasave, Lavasa, Maharashtra 412112",
+          note:"Open daily, 9:00 AM–9:00 PM. Details supplied by the user; call to confirm current hours and services.",
+          email:"admin@apollolavasa.com",
+          whatsapp:false,
+          badge:"User-supplied details · confirm first",
+          source:"Apollo Hospitals general contact page",
+          sourceUrl:"https://www.apollohospitals.com/contact-us"
+        },
+        {
+          category:"medical",
+          name:"Apollo Pharmacy Lavasa OP",
+          trade:"Pharmacy / medicine availability",
+          phone:"+918976742361",
+          phones:[{label:"Call pharmacy",phone:"+918976742361"}],
+          numberText:"+91 89767 42361",
+          coverage:"Shop No. 1, At/Post Davase Village, Tal. Mulshi, Dist. Pune 412112",
+          note:"Listed hours: daily, 9:00 AM–11:00 PM. Call ahead to confirm medicine stock and current hours.",
+          whatsapp:false,
+          badge:"Apollo Pharmacy listing · confirm first",
+          source:"Apollo Pharmacy store page",
+          sourceUrl:"https://www.apollopharmacy.in/medical-stores/lavasa/apollo_pharmacy_lavasa-12101"
+        },
+        {
+          category:"plumber",
+          name:"Kaam Ke Bande",
+          trade:"Plumbing service enquiry",
+          phone:"+917060724757",
+          numberText:"+91 70607 24757",
+          coverage:"Lavasa plumbing enquiry page",
+          note:"Provider page lists plumbing service for Lavasa. Confirm current coverage, availability, and price directly.",
+          source:"Provider website",
+          sourceUrl:"https://www.kaamkebande.com/pune/plumber-in-lavasa-pune"
+        },
+        {
+          category:"transport",
+          name:"Mansi Cab",
+          trade:"Cab booking",
+          phone:"+918484846395",
+          numberText:"+91 84848 46395",
+          coverage:"Lavasa booking enquiries",
+          note:"Provider page lists Lavasa local and outstation bookings. Confirm pickup coverage, vehicle, fare, and availability.",
+          source:"Provider website",
+          sourceUrl:"https://mansicab.com/city/taxi-service-in-lavasa"
+        }
+      ];
+      const areas = ["Dasve Town Center","Portofino Street","Mugaon","Villa clusters","Temghar–Lavasa Ghat Road","Warasgaon Lake","Other / nearby village"];
+      const issueList = document.getElementById("issueList");
+      const feedSearch = document.getElementById("feedSearch");
+      const categoryFilter = document.getElementById("categoryFilter");
+      const severityFilter = document.getElementById("severityFilter");
+      const formMessage = document.getElementById("formMessage");
+      const toast = document.getElementById("toast");
+      let toastTimer = 0;
+      let preparedPhoto = "";
+      const dialogs = {
+        report: document.getElementById("reportDialog"),
+        provider: document.getElementById("providerDialog"),
+        sos: document.getElementById("sosDialog")
+      };
+
+      function read(key, fallback) {
+        try {
+          const value = JSON.parse(localStorage.getItem(key) || "null");
+          return value === null ? fallback : value;
+        } catch (_) { return fallback; }
+      }
+      function write(key, value) {
+        try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+        catch (_) { return false; }
+      }
+      function getIssues() { const items = read(ISSUE_KEY, []); return Array.isArray(items) ? items : []; }
+      function getSuggestions() { const items = read(PROVIDER_KEY, []); return Array.isArray(items) ? items : []; }
+      function getVotes() { const items = read(VOTE_KEY, []); return Array.isArray(items) ? items : []; }
+      function showToast(text) {
+        toast.textContent = text;
+        toast.classList.add("visible");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 2800);
+      }
+      function element(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function makeBadge(text, cls) { return element("span", "badge " + cls, text); }
+      function formatDate(iso) {
+        const date = new Date(iso);
+        if (Number.isNaN(date.getTime())) return "Date unavailable";
+        return new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}).format(date);
+      }
+      function categoryLabel(id) { return (categories.find(item => item.id === id) || {}).label || "Other"; }
+      function urgencyClass(value) {
+        return value === "Critical" ? "badge-critical" : value === "High" ? "badge-high" : value === "Medium" ? "badge-medium" : "badge-low";
+      }
+      function filterIssues(items) {
+        const query = feedSearch.value.trim().toLowerCase();
+        const cat = categoryFilter.value;
+        const sev = severityFilter.value;
+        return items.filter(issue => {
+          const searchable = [issue.title,issue.area,issue.landmark,issue.details,categoryLabel(issue.category)].join(" ").toLowerCase();
+          return (cat === "all" || issue.category === cat) &&
+            (sev === "all" || issue.urgency === sev) &&
+            (!query || searchable.includes(query));
+        }).sort((a,b) => {
+          const aActive = a.status !== "Resolved", bActive = b.status !== "Resolved";
+          if (aActive !== bActive) return aActive ? -1 : 1;
+          const aOfficial = a.source === "official" && a.verified === true;
+          const bOfficial = b.source === "official" && b.verified === true;
+          if (aOfficial !== bOfficial) return aOfficial ? -1 : 1;
+          if (a.urgency === "Critical" && b.urgency !== "Critical") return -1;
+          if (b.urgency === "Critical" && a.urgency !== "Critical") return 1;
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      }
+      function renderFeed() {
+        const issues = getIssues();
+        const visible = filterIssues(issues);
+        issueList.replaceChildren();
+        document.getElementById("feedCount").textContent = visible.length + (visible.length === 1 ? " report" : " reports");
+        if (!visible.length) {
+          const empty = element("div","empty-feed");
+          const title = element("strong","",issues.length ? "No matching reports" : "No reports on this device yet");
+          const body = element("p","",issues.length ? "Try a different search or filter." : "Start the board with a clear, specific report. Avoid describing a community post as official unless you are an authorized issuer.");
+          empty.append(title,body);
+          if (!issues.length) {
+            const button = element("button","btn btn-yellow","Report an issue");
+            button.type = "button";
+            button.addEventListener("click",openReport);
+            empty.append(button);
+          }
+          issueList.append(empty);
+        } else {
+          visible.forEach(issue => issueList.append(makeIssueCard(issue)));
+        }
+        updateMonitor(issues);
+      }
+      function makeIssueCard(issue) {
+        const card = element("article","issue-card" + (issue.urgency === "Critical" && issue.status !== "Resolved" ? " critical" : "") + (issue.status === "Resolved" ? " resolved" : ""));
+        card.id = "issue-" + issue.id;
+        const header = element("div","issue-head");
+        const titleWrap = document.createElement("div");
+        const title = element("h3","issue-title",issue.title);
+        const badges = element("div","issue-meta");
+        const isOfficial = issue.source === "official" && issue.verified === true;
+        badges.append(
+          makeBadge(isOfficial ? "🛡 Official advisory" + (issue.issuer ? " · " + issue.issuer : "") : "● Community report · Neighbour",isOfficial ? "badge-official" : "badge-community"),
+          makeBadge(issue.urgency + " urgency",urgencyClass(issue.urgency)),
+          makeBadge(issue.status,"badge-status")
+        );
+        if (issue.sourceRequested === "official" && !isOfficial) {
+          const pending = makeBadge("Not authenticated · shown as community", "badge-community");
+          badges.append(pending);
+        }
+        titleWrap.append(title,badges);
+        header.append(titleWrap);
+        card.append(header);
+        const loc = element("p","issue-location","⌖ " + issue.area + (issue.landmark ? " · " + issue.landmark : "") + " · " + categoryLabel(issue.category));
+        const desc = element("p","issue-description",issue.details);
+        card.append(loc,desc);
+        if (issue.photo) {
+          const img = document.createElement("img");
+          img.className = "issue-photo";
+          img.src = issue.photo;
+          img.alt = "Photo attached to community incident report";
+          img.loading = "lazy";
+          card.append(img);
+        }
+        const foot = element("div","issue-footer");
+        foot.append(element("span","issue-date","Posted " + formatDate(issue.createdAt) + " · Reporter identity private"));
+        const actions = element("div","issue-actions");
+        const votes = getVotes();
+        const voted = votes.includes(issue.id);
+        const affected = element("button","text-btn" + (voted ? " voted" : ""),"Affected too · " + Number(issue.affectedCount || 0));
+        affected.type = "button";
+        affected.setAttribute("aria-pressed",String(voted));
+        affected.addEventListener("click",() => toggleAffected(issue.id));
+        const share = element("a","text-btn","Share alert");
+        share.href = shareUrl(issue);
+        share.target = "_blank";
+        share.rel = "noopener noreferrer";
+        share.setAttribute("aria-label","Share " + issue.title + " on WhatsApp");
+        const status = document.createElement("select");
+        status.className = "status-control";
+        status.setAttribute("aria-label","Update status for " + issue.title);
+        ["Reported","In Progress","Resolved"].forEach(value => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.textContent = value;
+          option.selected = issue.status === value;
+          status.append(option);
+        });
+        status.addEventListener("change",() => updateStatus(issue.id,status.value));
+        actions.append(affected,share,status);
+        foot.append(actions);
+        card.append(foot);
+        return card;
+      }
+      function shareUrl(issue) {
+        const source = issue.source === "official" && issue.verified === true ? "OFFICIAL_ADVISORY" : "COMMUNITY_REPORT";
+        const alert = "🚨 *Lavasa Local Alert* 🚨\n" +
+          "*" + issue.title + "*\n" +
+          "📍 Location: " + issue.area + (issue.landmark ? " · " + issue.landmark : "") + "\n" +
+          "📊 Status: " + issue.status + "\n" +
+          "🏷️ Source: " + source + "\n\n" +
+          issue.details + "\n\nView live updates: " + window.location.href.split("#")[0];
+        return "https://api.whatsapp.com/send?text=" + encodeURIComponent(alert);
+      }
+      function toggleAffected(id) {
+        const issues = getIssues();
+        const issue = issues.find(item => item.id === id);
+        if (!issue) return;
+        let votes = getVotes();
+        const hasVote = votes.includes(id);
+        issue.affectedCount = Math.max(0,Number(issue.affectedCount || 0) + (hasVote ? -1 : 1));
+        votes = hasVote ? votes.filter(value => value !== id) : votes.concat(id);
+        if (!write(ISSUE_KEY,issues) || !write(VOTE_KEY,votes)) {
+          showToast("Could not save this change in local browser storage");
+          return;
+        }
+        renderFeed();
+      }
+      function updateStatus(id,status) {
+        const issues = getIssues();
+        const issue = issues.find(item => item.id === id);
+        if (!issue || !["Reported","In Progress","Resolved"].includes(status)) return;
+        issue.status = status;
+        issue.updatedAt = new Date().toISOString();
+        if (write(ISSUE_KEY,issues)) {
+          renderFeed();
+          showToast("Incident status changed to " + status);
+        } else showToast("Could not save status on this device");
+      }
+      function updateMonitor(issues) {
+        const active = issues.filter(issue => issue.status !== "Resolved");
+        const mapping = {
+          roadStatus: active.filter(issue => issue.category === "landslide"),
+          powerStatus: active.filter(issue => issue.category === "power"),
+          waterStatus: active.filter(issue => issue.category === "water")
+        };
+        Object.entries(mapping).forEach(([id,reports]) => {
+          const value = document.querySelector("#" + id + " .status-value");
+          value.className = "status-value" + (reports.some(issue => issue.urgency === "Critical") ? " critical" : reports.length ? " reported" : "");
+          value.textContent = reports.length ? reports.length + " community " + (reports.length === 1 ? "report" : "reports") + " · unverified" : "Awaiting verified update";
+        });
+        const critical = active.find(issue => issue.urgency === "Critical" && issue.category === "landslide");
+        const bar = document.getElementById("criticalBar");
+        if (critical) {
+          document.getElementById("criticalText").textContent = "Critical community report · " + critical.title + " · " + critical.area;
+          bar.classList.add("show");
+          document.getElementById("criticalView").onclick = () => document.getElementById("issue-" + critical.id)?.scrollIntoView({behavior:"smooth",block:"center"});
+        } else bar.classList.remove("show");
+      }
+      function renderDirectory() {
+        const grid = document.getElementById("directoryGrid");
+        grid.replaceChildren();
+        providers.forEach(provider => {
+          const listings = publicContacts.filter(contact => contact.category === provider.id);
+          const card = element("article","directory-card");
+          const top = element("div","directory-top");
+          top.append(element("span","directory-icon",provider.icon),makeBadge(listings.length ? listings.length + " public listing" + (listings.length === 1 ? "" : "s") : "0 verified contacts",listings.length ? "badge-community" : "badge-status"));
+          const title = element("h3","",provider.label);
+          const desc = element("p","",provider.desc);
+          const button = element("button","btn btn-small","Suggest a contact");
+          button.type = "button";
+          button.addEventListener("click",() => openProvider(provider.id));
+          if (provider.id === "wildlife") {
+            card.classList.add("wildlife-card");
+            const note = element("p","wildlife-note","No local rescuer is verified yet. For a snakebite or medical emergency, call 108.");
+            const emergency = element("a","btn btn-red btn-small","Snakebite emergency · Call 108");
+            emergency.href = "tel:108";
+            card.append(top,title,desc,note,button,emergency);
+          } else {
+            card.append(top,title,desc,button);
+          }
+          grid.append(card);
+        });
+        publicContacts.forEach(contact => grid.append(makePublicContactCard(contact)));
+        renderSuggestions();
+      }
+      function makePublicContactCard(contact) {
+        const card = element("article","directory-card public-contact");
+        const top = element("div","directory-top");
+        top.append(element("span","directory-icon","☎"),makeBadge(contact.badge || "Public listing · unverified","badge-community"));
+        const title = element("h3","",contact.name);
+        const trade = element("p","",contact.trade);
+        const coverage = element("p","",contact.coverage);
+        const note = element("p","",contact.note);
+        const number = element("p","public-number",contact.numberText);
+        const actions = element("div","contact-actions");
+        const phones = contact.phones || [{label:"Call",phone:contact.phone}];
+        phones.forEach(item => {
+          const call = element("a","btn btn-dark",item.label);
+          call.href = "tel:" + item.phone;
+          actions.append(call);
+        });
+        if (contact.whatsapp !== false) {
+          const digits = contact.phone.replace(/\D/g,"");
+          const message = "Hi " + contact.name + ", I found your contact on the Lavasa Local hub. I need assistance with " + contact.trade + " in Lavasa. Are you available?";
+          const whatsapp = element("a","btn btn-yellow","WhatsApp");
+          whatsapp.href = "https://wa.me/" + digits + "?text=" + encodeURIComponent(message);
+          whatsapp.target = "_blank";
+          whatsapp.rel = "noopener noreferrer";
+          actions.append(whatsapp);
+        }
+        let email;
+        if (contact.email) {
+          email = element("a","contact-email","Email: " + contact.email);
+          email.href = "mailto:" + contact.email;
+        }
+        const source = element("a","contact-source",contact.source + " ↗");
+        source.href = contact.sourceUrl;
+        source.target = "_blank";
+        source.rel = "noopener noreferrer";
+        card.append(top,title,trade,coverage,note,number);
+        if (email) card.append(email);
+        card.append(actions,source);
+        return card;
+      }
+      function renderSuggestions() {
+        const list = document.getElementById("suggestedList");
+        list.replaceChildren();
+        const items = getSuggestions();
+        if (!items.length) return;
+        const label = element("p","eyebrow","Saved on this device / unverified suggestions");
+        list.append(label);
+        items.forEach(item => {
+          const row = element("div","pending-row");
+          row.append(element("strong","",item.name + " · " + item.trade),element("span","",item.category + " · Pending local verification"));
+          list.append(row);
+        });
+      }
+      function openDialog(dialog) { if (!dialog.open) dialog.showModal(); }
+      function closeDialog(dialog) { if (dialog.open) dialog.close(); }
+      function openReport() {
+        formMessage.className = "form-message";
+        openDialog(dialogs.report);
+      }
+      function openProvider(categoryId) {
+        const select = document.getElementById("providerCategory");
+        if (categoryId) select.value = categoryId;
+        openDialog(dialogs.provider);
+      }
+      document.querySelectorAll("[data-open-report]").forEach(node => node.addEventListener("click",event => { event.preventDefault(); openReport(); }));
+      document.querySelectorAll("[data-open-sos]").forEach(node => node.addEventListener("click",() => openDialog(dialogs.sos)));
+      document.querySelectorAll("[data-close-dialog]").forEach(node => node.addEventListener("click",() => closeDialog(node.closest("dialog"))));
+      Object.values(dialogs).forEach(dialog => dialog.addEventListener("click",event => {
+        if (event.target === dialog) closeDialog(dialog);
+      }));
+      document.getElementById("criticalView").addEventListener("click",() => document.getElementById("alerts").scrollIntoView({behavior:"smooth"}));
+
+      const providerSelect = document.getElementById("providerCategory");
+      providers.forEach(provider => {
+        const option = document.createElement("option");
+        option.value = provider.id;
+        option.textContent = provider.label;
+        providerSelect.append(option);
+      });
+      feedSearch.addEventListener("input",renderFeed);
+      categoryFilter.addEventListener("change",renderFeed);
+      severityFilter.addEventListener("change",renderFeed);
+
+      const sourceType = document.getElementById("sourceType");
+      sourceType.addEventListener("change",() => {
+        if (sourceType.value !== "official") return;
+        const confirmed = window.confirm("Official notices carry legal accountability. This Phase 1 preview cannot verify an authorized township or government issuer. Continue? The notice will be stored and shown as an unverified Community Report.");
+        if (!confirmed) {
+          sourceType.value = "community";
+          showToast("Classification kept as Community Report");
+        } else {
+          showToast("Client preview will downgrade this to Community Report");
+        }
+      });
+
+      function compressImage(file) {
+        return new Promise((resolve,reject) => {
+          if (!file) { resolve(""); return; }
+          if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { reject(new Error("Choose a JPEG, PNG, or WebP image.")); return; }
+          if (file.size > 5 * 1024 * 1024) { reject(new Error("Photo must be 5 MB or smaller.")); return; }
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error("Could not read the selected photo."));
+          reader.onload = () => {
+            const image = new Image();
+            image.onerror = () => reject(new Error("Could not open this image."));
+            image.onload = () => {
+              const maxEdge = 1280;
+              const ratio = Math.min(1,maxEdge / Math.max(image.naturalWidth,image.naturalHeight));
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.max(1,Math.round(image.naturalWidth * ratio));
+              canvas.height = Math.max(1,Math.round(image.naturalHeight * ratio));
+              const context = canvas.getContext("2d");
+              if (!context) { reject(new Error("Photo preview is unavailable in this browser.")); return; }
+              context.drawImage(image,0,0,canvas.width,canvas.height);
+              resolve(canvas.toDataURL("image/jpeg",.78));
+            };
+            image.src = String(reader.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      const photoInput = document.getElementById("issuePhoto");
+      photoInput.addEventListener("change",async () => {
+        preparedPhoto = "";
+        const wrap = document.getElementById("previewWrap");
+        const preview = document.getElementById("photoPreview");
+        wrap.classList.remove("show");
+        const file = photoInput.files && photoInput.files[0];
+        if (!file) return;
+        try {
+          preparedPhoto = await compressImage(file);
+          preview.src = preparedPhoto;
+          wrap.classList.add("show");
+        } catch(error) {
+          photoInput.value = "";
+          document.getElementById("formMessage").textContent = error.message;
+          document.getElementById("formMessage").className = "form-message show error";
+        }
+      });
+      document.getElementById("incidentForm").addEventListener("submit",event => {
+        event.preventDefault();
+        formMessage.className = "form-message";
+        const title = document.getElementById("issueTitle").value.trim();
+        const details = document.getElementById("issueDetails").value.trim();
+        if (title.length < 5 || title.length > 120 || details.length < 10 || details.length > 1000) {
+          formMessage.textContent = "Check title length (5–120) and description length (10–1000).";
+          formMessage.classList.add("show","error");
+          return;
+        }
+        const requestedOfficial = sourceType.value === "official";
+        const issue = {
+          id: (window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
+          category: document.getElementById("issueCategory").value,
+          title,
+          area: document.getElementById("issueArea").value,
+          landmark: document.getElementById("issueLandmark").value.trim(),
+          urgency: document.getElementById("issueUrgency").value,
+          source: "community",
+          sourceRequested: requestedOfficial ? "official" : "community",
+          verified: false,
+          details,
+          photo: preparedPhoto,
+          reporterPhone: document.getElementById("reporterPhone").value.trim(),
+          status: "Reported",
+          affectedCount: 1,
+          createdAt: new Date().toISOString()
+        };
+        const issues = getIssues();
+        issues.push(issue);
+        if (!write(ISSUE_KEY,issues)) {
+          formMessage.textContent = "This browser could not save the report. Remove a large saved photo or check storage settings.";
+          formMessage.classList.add("show","error");
+          return;
+        }
+        renderFeed();
+        document.getElementById("incidentForm").reset();
+        preparedPhoto = "";
+        document.getElementById("previewWrap").classList.remove("show");
+        formMessage.textContent = requestedOfficial ? "Saved locally as a Community Report. No authorized issuer could be verified." : "Community report added to this device.";
+        formMessage.classList.add("show","success");
+        document.getElementById("submitIssue").disabled = true;
+        document.getElementById("submitIssue").textContent = "Report saved";
+        showToast("Incident report added to this device");
+        window.setTimeout(() => {
+          document.getElementById("submitIssue").disabled = false;
+          document.getElementById("submitIssue").textContent = "Publish community report";
+          closeDialog(dialogs.report);
+          document.getElementById("alerts").scrollIntoView({behavior:"smooth"});
+          document.getElementById("issue-" + issue.id)?.scrollIntoView({behavior:"smooth",block:"center"});
+          formMessage.className = "form-message";
+        },850);
+      });
+      document.getElementById("providerForm").addEventListener("submit",event => {
+        event.preventDefault();
+        const items = getSuggestions();
+        const item = {
+          id:String(Date.now()),
+          category:providerSelect.options[providerSelect.selectedIndex]?.textContent || "",
+          name:document.getElementById("providerName").value.trim(),
+          trade:document.getElementById("providerTrade").value.trim(),
+          phone:document.getElementById("providerPhone").value.trim(),
+          hours:document.getElementById("providerHours").value.trim(),
+          areas:document.getElementById("providerAreas").value.trim(),
+          notes:document.getElementById("providerNotes").value.trim(),
+          verified:false
+        };
+        items.push(item);
+        const message = document.getElementById("providerMessage");
+        if (!write(PROVIDER_KEY,items)) {
+          message.textContent = "Could not save this suggestion in browser storage.";
+          message.className = "form-message show error";
+          return;
+        }
+        renderSuggestions();
+        document.getElementById("providerForm").reset();
+        message.textContent = "Saved on this device as an unverified suggestion. Call and WhatsApp actions stay disabled until the contact is verified.";
+        message.className = "form-message show success";
+        showToast("Provider suggestion saved locally");
+        window.setTimeout(() => closeDialog(dialogs.provider),900);
+      });
+      function updateOnline() {
+        document.getElementById("offlineIndicator").classList.toggle("show",!navigator.onLine);
+      }
+      window.addEventListener("online",updateOnline);
+      window.addEventListener("offline",updateOnline);
+      updateOnline();
+      renderDirectory();
+      renderFeed();
+      if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      }
+    })();
+  </script>
+</body>
+</html>
